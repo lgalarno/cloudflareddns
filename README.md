@@ -1,9 +1,12 @@
 # **Cloudflare Dynamic DNS (DDNS) Python script** #
 
+The script check your current public IP and compare it to the IP associated to the DNS records for a domain managed by [Cloudflare](https://www.cloudflare.com/). If different, the DNS record(s) will be updated with the new public IP.
+
+
+
 You need a [Cloudflare API](https://developers.cloudflare.com/api/) token with DNS Write permission.
 
 You can find the Zone ID for your domain in the right sidebar of your domain’s Overview page in the Cloudflare dashboard.
-
 * Here’s how to get there:
     * From your current Account home, click the domain you want.
     * You’ll land on the Overview page for that zone.

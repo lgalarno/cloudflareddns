@@ -11,14 +11,17 @@ BASE_DIR = Path(__file__).resolve().parent
 config = dotenv_values(BASE_DIR / '.env')
 API_TOKEN = config.get('API_TOKEN')
 ZONE_ID = config.get('ZONE_ID')
+PUBLIC_IP_SITES = ["http://checkip.amazonaws.com","https://ident.me", "https://api.ipify.org" ]
 
 
-def get_ip():
-    r = requests.get("http://checkip.amazonaws.com")
-    if r.status_code == 200:
-        ip = r.text.strip()
-        if validate_ip(ip):
-            return ip
+def get_public_ip():
+    for site in PUBLIC_IP_SITES:
+        print(site)
+        r = requests.get(site)
+        if r.status_code == 200:
+            ip = r.text.strip()
+            if validate_ip(ip):
+                return ip
     return None
 
 
@@ -60,16 +63,19 @@ def get_dns_records(client, zone_id):
 
 
 if __name__ == "__main__":
-    current_ip = get_ip()
-    print(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - Current IP: {current_ip}")
-    client = Cloudflare(api_token=API_TOKEN)
-    dns_records = get_dns_records(client, ZONE_ID)
-    if dns_records is not None:  # Check if records exist
-        for record in dns_records:  # Loop through each record
-            if validate_ip(record.content) and record.content != current_ip:  # Check if the record IP is different from the current IP
-                if update_dns_record(client=client, record=record, new_ip=current_ip):
-                    print(f"{record.name} was updated from {record.content} to {current_ip}")
-                else:
-                    print(f"Failed to update {record.name} IP address.")
+    current_ip = get_public_ip()
+    if current_ip is not None:
+        print(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - Current IP: {current_ip}")
+        client = Cloudflare(api_token=API_TOKEN)
+        dns_records = get_dns_records(client, ZONE_ID)
+        if dns_records is not None:  # Check if records exist
+            for record in dns_records:  # Loop through each record
+                if validate_ip(record.content) and record.content != current_ip:  # Check if the record IP is different from the current IP
+                    if update_dns_record(client=client, record=record, new_ip=current_ip):
+                        print(f"{record.name} was updated from {record.content} to {current_ip}")
+                    else:
+                        print(f"Failed to update {record.name} IP address.")
+        else:
+            print("No DNS records found for the specified zone.")
     else:
-        print("No DNS records found for the specified zone.")
+        print("Unable to retrieve public IP address.")
