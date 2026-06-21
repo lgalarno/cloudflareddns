@@ -13,9 +13,6 @@ API_TOKEN = config.get('API_TOKEN')
 ZONE_ID = config.get('ZONE_ID')
 
 
-def main():
-    print("Hello from cloudflareddns!")
-
 def get_ip():
     r = requests.get("http://checkip.amazonaws.com")
     if r.status_code == 200:
@@ -76,4 +73,3 @@ if __name__ == "__main__":
                     print(f"Failed to update {record.name} IP address.")
     else:
         print("No DNS records found for the specified zone.")
-        
