@@ -14,10 +14,15 @@ You can find the Zone ID for your domain in the right sidebar of your domain’s
 
 The script is written in Python (v3.14) with the package and project manager [uv](https://docs.astral.sh/uv/)
 
-Fill the .env_template file with the information and save it to .env
-
-* _Note: you may want to keep the original file for git update compatibility_
-* The LOGGING options are:
-  * 0: not logging
-  * 1 always logging
-  * 2 logging when update OR errors
+To install:
+  * Make sure uv is installed (follow the instructions on the website).
+  * In the cloned repository folder, run the command:
+  ```
+  uv sync'
+  ```
+  * Fill the .env_template file with the information and save it to .env
+    * _Note: you may want to keep the original file for git update compatibility_
+    * The LOGGING options are:
+      * 0: not logging
+      * 1 always logging
+      * 2 logging when update OR errors
