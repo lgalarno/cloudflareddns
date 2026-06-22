@@ -28,23 +28,12 @@ The script check your current public IP and compare it to the IP associated to t
 
 
 ### Use case example to run the script automatically on Linux ###
-1.	Create a bash script to run the Python script and name it cloudflareddns.sh
-    ```
-    #!/bin/bash
-    # run the cloudflareddns python script.
-    uv run --project /path/to/cloudflareddns/ /path/to/cloudflareddns/src/main.py
-    ```
-2.	Make the bash script executable.
-    ```
-    chmod +x cloudflareddns.sh
-    ```
-3.	Create a new cron job run the script (every hour in this example).
+1. Create a cron job run the script (every hour in this example).
     ```
     crontab -e
     ```
-
-    add a line like:
+2. Add a line like:
     ```
-    0 * * * * / path/to/scripts/cloudflareddns.sh
+    0 * * * * uv run --project /path/to/cloudflareddns/ /path/to/cloudflareddns/src/main.py
     ```
-
+    
