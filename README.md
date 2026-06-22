@@ -41,11 +41,7 @@ The script check your current public IP and compare it to the IP associated to t
    _Note: don't put brackets when using arguments!_
 
 ### Use case example to run the script automatically on Linux ###
-<<<<<<< HEAD
-1. Create a cron job to run the script (every hour in this example).
-=======
 1. Create a cron job to run the python script (every hour in this example).
->>>>>>> 8f7a31dbf4663f998848c51b25ae433cdc3a115a
     ```
     crontab -e
     ```
@@ -53,7 +49,4 @@ The script check your current public IP and compare it to the IP associated to t
     ```
     0 * * * * uv run --project /path/to/cloudflareddns/ /path/to/cloudflareddns/src/main.py
     ```
-<<<<<<< HEAD
-=======
     
->>>>>>> 8f7a31dbf4663f998848c51b25ae433cdc3a115a
