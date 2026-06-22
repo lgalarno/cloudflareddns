@@ -19,7 +19,7 @@ The script check your current public IP and compare it to the IP associated to t
   ```
   uv sync
   ```
-  * Variables and options can be provided as systen environment variable, as arguments or in a .env file.
+  * Parameters can be provided as system environment variables, as arguments or in a .env file.
 
     _Note: Values from command-line arguments take precedence over environment variables._
 
@@ -40,13 +40,44 @@ The script check your current public IP and compare it to the IP associated to t
 
    _Note: don't put brackets when using arguments!_
 
-### Use case example to run the script automatically on Linux ###
-1. Create a cron job to run the python script (every hour in this example).
+### Use case 1 to run the script automatically on Linux with crontab ###
+1. Create a cron job to run the Python script (every hour in this example).
     ```
     crontab -e
     ```
 2. Add the line:
     ```
-    0 * * * * uv run --project /path/to/cloudflareddns/ /path/to/cloudflareddns/src/main.py
+    0 * * * * /home/USERNAME/.local/bin/uv run --project /path/to/cloudflareddns/ /path/to/cloudflareddns/src/main.py
     ```
     
+### Use case 2 to run the script automatically on Linux with a bash script ###
+
+1.	Create a bash script to run the Python script and name it cloudflareddns.sh (_a template is provided in the scripts folder._)
+
+        ```
+         #!/bin/bash
+         UV_PATH=/home/USERNAME/.local/bin/
+         SCRIPT_PATH=/path/to/cloudflareddns/
+         API_TOKEN=
+         ZONE_ID=
+         LOG_FILE=/path/to/log/logs.txt
+         LOGGING=1
+        
+         ${UV_PATH}uv run --project ${SCRIPT_PATH} ${SCRIPT_PATH}/src/main.py -t ${API_TOKEN} -z ${ZONE_ID} -f ${LOG_FILE} -l ${LOGGING}
+        ```
+
+2.	Make the bash script executable.
+
+        ```
+        chmod +x cloudflareddns.sh
+        ```
+   
+3.	Create a new cron job run the script (every hour in this example).
+        ```
+        crontab -e
+        ```
+
+4. Add the line:
+    ```
+    0 * * * * /path/to/cloudflareddns.sh
+     ```
