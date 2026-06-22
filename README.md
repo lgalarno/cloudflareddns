@@ -28,7 +28,7 @@ The script check your current public IP and compare it to the IP associated to t
 
 
 ### Use case example to run the script automatically on Linux ###
-1. Create a cron job run the script (every hour in this example).
+1. Create a cron job to run the python script (every hour in this example).
     ```
     crontab -e
     ```
