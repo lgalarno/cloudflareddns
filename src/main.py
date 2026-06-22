@@ -1,16 +1,16 @@
-from datetime import datetime
+import argparse
 import ipaddress
+import os
 import requests
+import sys
 from cloudflare import Cloudflare
+from datetime import datetime
+
+from dotenv import load_dotenv
+# from dotenv import dotenv_values
 from pathlib import Path
 
-from dotenv import dotenv_values
 
-
-BASE_DIR = Path(__file__).resolve().parent
-config = dotenv_values(BASE_DIR / '.env')
-API_TOKEN = config.get('API_TOKEN')
-ZONE_ID = config.get('ZONE_ID')
 PUBLIC_IP_SITES = ["http://checkip.amazonaws.com","https://ident.me", "https://api.ipify.org" ]
 
 
@@ -62,7 +62,64 @@ def get_dns_records(client, zone_id):
 
 
 if __name__ == "__main__":
-    logging = int(config["LOGGING"])
+    BASE_DIR = Path(__file__).resolve().parent
+    load_dotenv()
+    # config = dotenv_values(BASE_DIR / '.env')
+
+    # Argument parsing
+    # Validate that API_TOKEN and ZONE_ID are provided either via command-line arguments or environment variables
+    # Values from command-line arguments take precedence over environment variables
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-t", "--token",
+                    required=False,
+                    type=str,
+                    help="Cloudflare API TOKEN")
+    parser.add_argument("-z", "--zone",
+                    required=False,
+                    type=str,
+                    help="Cloudflare ZONE ID",
+                    )
+    parser.add_argument("-l", "--logging",
+                    required=False,
+                    help="logging level",
+                    type=int,
+                    choices=[0,1,2]
+                    )    
+    parser.add_argument("-f", "--file",
+                    required=False,
+                    help="log file path",
+                    type=str
+                    )    
+    args = parser.parse_args()
+    if args.token:
+        API_TOKEN = args.token
+    else:
+        API_TOKEN = os.getenv("API_TOKEN")  # config.get('API_TOKEN')
+
+    if args.zone:
+        ZONE_ID = args.zone
+    else:
+        ZONE_ID = os.getenv("ZONE_ID")  # config.get('ZONE_ID')
+
+    if not API_TOKEN or not ZONE_ID:
+        sys.exit("Error: API_TOKEN and ZONE_ID must be provided either as command-line arguments or in the .env file.")
+
+    if args.logging:
+        LOGGING = args.logging
+    else:
+        LOGGING = os.getenv("LOGGING")  # int(config["LOGGING"])
+
+    if args.file:
+        LOG_FILE = args.file
+    else:
+        LOG_FILE = os.getenv("LOG_FILE")  # config.get('LOG_FILE')
+
+    try:
+        LOGGING = int(LOGGING)
+    except ValueError:
+        print("Invalid LOGGING value. Defaulting to 0 (no logging).")
+        LOGGING = 0
+
     current_ip = get_public_ip()
     now = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
     logs = [now,]
@@ -81,15 +138,17 @@ if __name__ == "__main__":
             logs.append("No DNS records found for the specified zone.")
     else:
         logs.append("Unable to retrieve public IP address.")
-    if logging > 0:
+    if LOGGING > 0:
         logs.append("-----")
-        LOG_FILE = config.get('LOG_FILE')
         if LOG_FILE:
             LOG_FILE = Path(LOG_FILE)
         else:
             LOG_FILE = BASE_DIR / 'logs.txt'
-        if ((len(logs) > 3) and (logging == 2)) or (logging == 1):
+        if ((len(logs) > 3) and (LOGGING == 2)) or (LOGGING == 1):
             # sauver log si logging == 2 et update OU erreur (len(logs) > 3), ou si always logging (logging == 1)
-            with open(LOG_FILE, 'a') as log_file:
-                for log in logs:
-                    log_file.write(f"{log}\n")
+            try:
+                with open(LOG_FILE, 'a') as log_file:
+                    for log in logs:
+                        log_file.write(f"{log}\n")
+            except (PermissionError, OSError):
+                print("Error writing to log file. Please check the file path and permissions.")

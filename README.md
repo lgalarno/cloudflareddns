@@ -19,21 +19,33 @@ The script check your current public IP and compare it to the IP associated to t
   ```
   uv sync
   ```
-  * Fill the .env_template file with the information and save it to .env
-    * _Note: you may want to keep the original file for git update compatibility_
-    * The LOGGING options are:
-      * 0: not logging
-      * 1 always logging
-      * 2 logging only when an IP update is performed OR errors
+  * Variables and options can be provided as systen environment variable, as arguments or in a .env file.
 
+    _Note: Values from command-line arguments take precedence over environment variables._
+
+      - API_TOKEN  [-t --token] Cloudflare API token. [required]
+      - ZONE_ID [-z --zone required] Zone ID for your domain.  [required]
+      - LOGGING [-l --logging INT] Logging options are: [optional]
+        * 0 not logging
+        * 1 always logging
+        * 2 logging only when an IP update is performed OR errors
+      - ZONE_ID [-f --file] log file path. [optional]. If the log file path is not provided, a logs.txt file will be created in the same folder as the Python script.
+
+    _Note: To use a .env file, fill out the .env_template with the required information and save it to .env. You may want to keep the original file for git update compatibility._
+
+### Usage ###
+  ```
+  uv run main.py [-t API_TOKEN -z ZONE_ID -l 0 -f log/file/path]
+  ```
+
+   _Note: don't put brackets when using arguments!_
 
 ### Use case example to run the script automatically on Linux ###
-1. Create a cron job run the script (every hour in this example).
+1. Create a cron job to run the script (every hour in this example).
     ```
     crontab -e
     ```
-2. Add a line like:
+2. Add the line:
     ```
     0 * * * * uv run --project /path/to/cloudflareddns/ /path/to/cloudflareddns/src/main.py
     ```
-    
