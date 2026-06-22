@@ -16,9 +16,9 @@ The script check your current public IP and compare it to the IP associated to t
 ### Installation ###
   * Make sure uv is installed (follow the instructions on the website).
   * In the cloned repository folder, run the command:
-  ```
-  uv sync
-  ```
+```
+uv sync
+```
   * Parameters can be provided as system environment variables, as arguments or in a .env file.
 
     _Note: Values from command-line arguments take precedence over environment variables._
@@ -34,50 +34,49 @@ The script check your current public IP and compare it to the IP associated to t
     _Note: To use a .env file, fill out the .env_template with the required information and save it to .env. You may want to keep the original file for git update compatibility._
 
 ### Usage ###
-  ```
-  uv run main.py [-t API_TOKEN -z ZONE_ID -l 0 -f log/file/path]
-  ```
+```
+uv run main.py [-t API_TOKEN -z ZONE_ID -l 0 -f log/file/path]
+```
 
    _Note: don't put brackets when using arguments!_
 
 ### Use case 1 to run the script automatically on Linux with crontab ###
 1. Create a cron job to run the Python script (every hour in this example).
-    ```
-    crontab -e
-    ```
+```
+crontab -e
+```
 2. Add the line:
-    ```
-    0 * * * * /home/USERNAME/.local/bin/uv run --project /path/to/cloudflareddns/ /path/to/cloudflareddns/src/main.py
-    ```
+```
+0 * * * * /home/USERNAME/.local/bin/uv run --project /path/to/cloudflareddns/ /path/to/cloudflareddns/src/main.py
+```
     
 ### Use case 2 to run the script automatically on Linux with a bash script ###
 
 1.	Create a bash script to run the Python script and name it cloudflareddns.sh (_a template is provided in the scripts folder._)
+```
+ #!/bin/bash
+ UV_PATH=/home/USERNAME/.local/bin/
+ SCRIPT_PATH=/path/to/cloudflareddns/
+ API_TOKEN=
+ ZONE_ID=
+ LOG_FILE=/path/to/log/logs.txt
+ LOGGING=1
 
-        ```
-         #!/bin/bash
-         UV_PATH=/home/USERNAME/.local/bin/
-         SCRIPT_PATH=/path/to/cloudflareddns/
-         API_TOKEN=
-         ZONE_ID=
-         LOG_FILE=/path/to/log/logs.txt
-         LOGGING=1
-        
-         ${UV_PATH}uv run --project ${SCRIPT_PATH} ${SCRIPT_PATH}/src/main.py -t ${API_TOKEN} -z ${ZONE_ID} -f ${LOG_FILE} -l ${LOGGING}
-        ```
+ ${UV_PATH}uv run --project ${SCRIPT_PATH} ${SCRIPT_PATH}/src/main.py -t ${API_TOKEN} -z ${ZONE_ID} -f ${LOG_FILE} -l ${LOGGING}
+```
 
 2.	Make the bash script executable.
 
-        ```
-        chmod +x cloudflareddns.sh
-        ```
+```
+chmod +x cloudflareddns.sh
+```
    
 3.	Create a new cron job run the script (every hour in this example).
-        ```
-        crontab -e
-        ```
+```
+crontab -e
+```
 
 4. Add the line:
-    ```
-    0 * * * * /path/to/cloudflareddns.sh
-     ```
+```
+0 * * * * /path/to/cloudflareddns.sh
+```
