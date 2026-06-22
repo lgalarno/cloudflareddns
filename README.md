@@ -29,7 +29,7 @@ The script check your current public IP and compare it to the IP associated to t
         * 0 not logging
         * 1 always logging
         * 2 logging only when an IP update is performed OR errors
-      - ZONE_ID [-f --file] log file path. [optional]. If the log file path is not provided, a logs.txt file will be created in the same folder as the Python script.
+      - LOG_FILE [-f --file] log file path. [optional]. If the log file path is not provided, a logs.txt file will be created in the same folder as the Python script.
 
     _Note: To use a .env file, fill out the .env_template with the required information and save it to .env. You may want to keep the original file for git update compatibility._
 
