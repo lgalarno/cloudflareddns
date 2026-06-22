@@ -7,7 +7,7 @@ The script check your current public IP and compare it to the IP associated to t
 You need a [Cloudflare API](https://developers.cloudflare.com/api/) token with DNS Write permission.
 
 You can find the Zone ID for your domain in the right sidebar of your domain’s Overview page in the Cloudflare dashboard.
-* Here’s how to get there:
+* Here’s how to get the Zone ID:
     * From your current Account home, click the domain you want.
     * You’ll land on the Overview page for that zone.
     * Look at the API section on the right sidebar — your Zone ID is listed there with a copy button. Your Account ID is also shown in the same section for convenience.
