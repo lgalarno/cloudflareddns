@@ -52,7 +52,7 @@ crontab -e
     
 ### Use case 2 to run the script automatically on Linux with a bash script ###
 
-1.	Create a bash script to run the Python script and name it cloudflareddns.sh (_a template is provided in the scripts folder._)
+1.	Create a bash script to run the Python script and name it cloudflareddns.sh (_a template is provided in the utilities folder._)
 ```
  #!/bin/bash
  UV_PATH=/home/USERNAME/.local/bin/
